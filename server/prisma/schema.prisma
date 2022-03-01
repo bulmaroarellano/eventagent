@@ -1,0 +1,122 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  createdAt DateTime @default(now())
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     String[]
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+model Order {
+  createdAt  DateTime  @default(now())
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId String?
+  discount   Float?
+  id         String    @id @default(cuid())
+  product    Menu?     @relation(fields: [productId], references: [id])
+  productId  String?
+  quantity   Int?
+  totalPrice Int?
+  updatedAt  DateTime  @updatedAt
+}
+
+model Customer {
+  addeessId   Address? @relation(fields: [addeessIdId], references: [id])
+  addeessIdId String?
+  createdAt   DateTime @default(now())
+  email       String?
+  events      Event[]
+  firstName   String?
+  id          String   @id @default(cuid())
+  lastName    String?
+  orders      Order[]
+  phone       String?
+  updatedAt   DateTime @updatedAt
+}
+
+model Address {
+  address_1   String?
+  address_2   String?
+  city        String?
+  createdAt   DateTime @default(now())
+  customersId Customer
+  id          String   @id @default(cuid())
+  state       String?
+  updatedAt   DateTime @updatedAt
+  zip         Int?
+}
+
+model Menu {
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  isAvailable Boolean?
+  itemPrice   Float
+  name        String?
+  orders      Order[]
+  updatedAt   DateTime @updatedAt
+}
+
+model Setting {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  itemm     String?
+  updatedAt DateTime @updatedAt
+  value     String?
+}
+
+model Billing {
+  amount     Float?
+  clientData Json?
+  createdAt  DateTime             @default(now())
+  discount   Float?
+  events     Event[]
+  id         String               @id @default(cuid())
+  iva        Float?
+  payForm    EnumBillingPayForm[]
+  price      Float?
+  product    String?
+  subtotal   Float?
+  totalValue Float?
+  updatedAt  DateTime             @updatedAt
+}
+
+model Employe {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  lastName  String?
+  name      String?
+  roleId    Float?
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  address     Customer? @relation(fields: [addressId], references: [id])
+  addressId   String?
+  billingId   Billing?  @relation(fields: [billingIdId], references: [id])
+  billingIdId String?
+  categoriId  String?
+  createdAt   DateTime  @default(now())
+  id          String    @id @default(cuid())
+  price       Float?
+  updatedAt   DateTime  @updatedAt
+}
+
+enum EnumBillingPayForm {
+  Paypal
+  CreditCard
+  Devit
+  Cash
+  Transfer
+}
