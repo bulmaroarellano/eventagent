@@ -1,0 +1,22 @@
+import * as React from "react";
+import {
+  Create,
+  SimpleForm,
+  CreateProps,
+  TextInput,
+  BooleanInput,
+  NumberInput,
+} from "react-admin";
+
+export const MenuCreate = (props: CreateProps): React.ReactElement => {
+  return (
+    <Create {...props}>
+      <SimpleForm>
+        <TextInput label="Description" multiline source="description" />
+        <BooleanInput label="isAvailable" source="isAvailable" />
+        <NumberInput label="Item Price" source="itemPrice" />
+        <TextInput label="Name" source="name" />
+      </SimpleForm>
+    </Create>
+  );
+};
